@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Router} from './config/router';
+import {Tabs} from './config/router';
 import {
   BackHandler,
   ToastAndroid
@@ -27,7 +27,7 @@ class App extends Component {
     }
 }
   render () {
-    return <Router/>
+    return <Tabs/>
   }
 }
 export default App;

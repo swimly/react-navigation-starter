@@ -16,7 +16,7 @@ const tabOptions = {
   tabBarPosition:'bottom', //tabBar的位置
   swipeEnabled: false,
   lazy: true,
-  initialRouteName: 'Home',
+  initialRouteName: 'Me',
   animationEnabled: false,
   backBehavior: 'none',
   tabBarOptions: {
@@ -90,6 +90,9 @@ const OfferStack = StackNavigator({
   }
 },navBarOption);
 const meStack = StackNavigator({
+  Login: {
+    screen: LoginScreen
+  },
   Me: {
     screen: MeScreen
   },
@@ -114,21 +117,3 @@ export const Tabs = TabNavigator({
     screen: meStack
   }
 },tabOptions)
-export const Router = StackNavigator({
-  Login: {
-    screen: LoginScreen
-  },
-  Index: {
-    screen: Tabs,
-    navigationOptions: ({navigation}) => ({
-      backBehavior: 'none',
-      header: null
-    })
-  }
-}, {
-  initialRouteName: 'Login',
-  backBehavior: 'none',
-  navigationOptions: ({navigation}) => ({
-    header: null
-  })
-})

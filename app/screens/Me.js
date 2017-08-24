@@ -29,6 +29,7 @@ export default class MeScreen extends Component {
       <Touchable
         style={{width:50,height:50,alignItems:'center',justifyContent:'center'}}
         background={Touchable.Ripple('rgba(0,0,0,0.2)')}
+        onPress = {()=>navigation.navigate('Message',{userId: '45641531354156'})}
       >
         <Image style={{width:24,height:24}} source={require('../assets/images/tips.png')}/>
       </Touchable>
