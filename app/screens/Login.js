@@ -30,7 +30,6 @@ export default class LoginScreen extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      logined: false,
       tel: '',
       pwd: ''
     }
@@ -45,9 +44,7 @@ export default class LoginScreen extends Component {
     })
     .then((res)=>{
       if (res) {
-        this.setState({
-          logined: true
-        })
+        this._Login();
       }
     })
   }
@@ -109,57 +106,42 @@ export default class LoginScreen extends Component {
       })
     }
   }
-  _renderView(){
-    if (!this.state.logined) {
-      return (
-        <View
-          style={[$.view, $.horizontalCenter, $.columnCenter,{padding:30,flexDirection:'column'}]}
-        >
-          <Image style={[$.logo]} source={require('../assets/images/logo.png')}/>
-          <Item
-            style={[$.row]}
-          >
-            <Image style={[$.icon]} source={require('../assets/images/phone.png')}/>
-            <Input 
-              placeholder="请输入手机"
-              style={[$.input]}
-              keyboardType="numeric"
-              onChangeText={(value)=>this.change('tel', value)}
-              maxLength={11}
-            />
-          </Item>
-          <Item
-            style={[$.row]}
-          >
-            <Image style={[$.icon]} source={require('../assets/images/pwd.png')}/>
-            <Input 
-              placeholder="请输入密码"
-              style={[$.input]}
-              secureTextEntry={true}
-              onChangeText={(value)=>this.change('pwd', value)}
-            />
-          </Item>
-          <Button full danger
-            style={[$.button, $.button_default,{marginTop:20}]}
-            onPress = {()=>this._submit()}
-          >
-            <Text>登录</Text>
-          </Button>
-        </View>
-      )
-    } else {
-      this._Login();
-    }
-  }
   render() {
     const {tel, pwd} = this.state;
     return (
       <View
-        style={{flex:1}}
+        style={[$.view, $.horizontalCenter, $.columnCenter,{padding:30,flexDirection:'column'}]}
       >
-        {
-          this._renderView()
-        }
+        <Image style={[$.logo]} source={require('../assets/images/logo.png')}/>
+        <Item
+          style={[$.row]}
+        >
+          <Image style={[$.icon]} source={require('../assets/images/phone.png')}/>
+          <Input 
+            placeholder="请输入手机"
+            style={[$.input]}
+            keyboardType="numeric"
+            onChangeText={(value)=>this.change('tel', value)}
+            maxLength={11}
+          />
+        </Item>
+        <Item
+          style={[$.row]}
+        >
+          <Image style={[$.icon]} source={require('../assets/images/pwd.png')}/>
+          <Input 
+            placeholder="请输入密码"
+            style={[$.input]}
+            secureTextEntry={true}
+            onChangeText={(value)=>this.change('pwd', value)}
+          />
+        </Item>
+        <Button full danger
+          style={[$.button, $.button_default,{marginTop:20}]}
+          onPress = {()=>this._submit()}
+        >
+          <Text>登录</Text>
+        </Button>
       </View>
     )
   }
