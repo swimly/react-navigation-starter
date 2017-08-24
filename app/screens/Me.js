@@ -48,14 +48,21 @@ export default class MeScreen extends Component {
       height: 50
     }
   });
+  constructor (props) {
+    super(props)
+    this.state = {
+      userId: this.props.navigation.state.params.userId
+    }
+  }
   render() {
+    const {userId} = this.state
     return (
       <View>
         <Touchable
           style={{padding:20}}
           onPress={()=>this.props.navigation.navigate('Wallet',{userId:'5411.21212'})}
         >
-          <Text>我的钱包</Text>
+          <Text>我的钱包{userId}</Text>
         </Touchable>
       </View>
     )

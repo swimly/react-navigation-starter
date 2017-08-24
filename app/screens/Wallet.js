@@ -35,15 +35,19 @@ export default class WalletScreen extends Component {
   });
   constructor (props) {
     super(props)
+    this.state = {
+      userId: this.props.navigation.state.params.userId
+    }
   }
   back () {
     this.props.navigation.back()
     alert(0)
   }
   render() {
+    const {userId} = this.state
     return (
       <View>
-        <Text>客户管理</Text>
+        <Text>客户管理{userId}</Text>
       </View>
     )
   }
