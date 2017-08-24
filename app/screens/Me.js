@@ -51,7 +51,7 @@ export default class MeScreen extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      userId: 'this.props.navigation.state.params.userId'
+      userId: this.props.navigation.state.params.userId
     }
   }
   render() {

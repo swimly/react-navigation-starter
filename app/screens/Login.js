@@ -44,16 +44,16 @@ export default class LoginScreen extends Component {
     })
     .then((res)=>{
       if (res) {
-        this._Login();
+        this._Login(res);
       }
     })
   }
   
-  _Login () {
+  _Login (userInfo) {
     const resetAction = NavigationActions.reset({
       index:0,
       actions: [
-        NavigationActions.navigate({routeName: 'Me',params: {userId: '54654165456'}})
+        NavigationActions.navigate({routeName: 'Me',params: {userId: userInfo.userId}})
       ]
     })
     this.props.navigation.dispatch(resetAction)
@@ -98,7 +98,7 @@ export default class LoginScreen extends Component {
               key:'userInfo',
               data: res.data.userInfo
             })
-            this._Login();
+            this._Login(res);
           } else {
             ToastAndroid.show(res.msg, ToastAndroid.SHORT);
           }
