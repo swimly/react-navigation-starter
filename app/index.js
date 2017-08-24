@@ -1,6 +1,10 @@
 import React, {Component} from 'react';
 import {Tabs} from './config/router';
 import {
+  AsyncStorage
+} from 'react-native';
+import Storage from 'react-native-storage';
+import {
   BackHandler,
   ToastAndroid
 } from 'react-native';

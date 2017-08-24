@@ -1,7 +1,9 @@
 import React from 'react';
 import {
-  Image
+  Image,
+  AsyncStorage
 } from 'react-native';
+import Storage from 'react-native-storage';
 import {TabNavigator, StackNavigator} from 'react-navigation';
 import CardStackStyleInterpolator from 'react-navigation/src/views/CardStackStyleInterpolator';
 import HomeScreen from '../screens/Home';
@@ -12,6 +14,15 @@ import CompanyScreen from '../screens/Company';
 import WalletScreen from '../screens/Wallet';
 import MessageScreen from '../screens/Message';
 import LoginScreen from '../screens/Login';
+global.storage = new Storage({
+  size: 1000,
+  storageBackend: AsyncStorage,
+  defaultExpires: 1000 * 3600 * 24,
+  enableCache: true,
+  sync : {
+  }
+})
+
 const tabOptions = {
   tabBarPosition:'bottom', //tabBar的位置
   swipeEnabled: false,

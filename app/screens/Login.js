@@ -1,14 +1,26 @@
 import React, { Component } from 'react';
+import { 
+  Container, 
+  Content, 
+  Button, 
+  Body, 
+  Icon, 
+  Text, 
+  Item, 
+  Input 
+} from 'native-base';
 import {
-  StyleSheet,
-  Text,
   Image,
-  View
+  View,
+  ToastAndroid
 } from 'react-native';
+
 import {NavigationActions} from 'react-navigation';
 import Touchable from 'react-native-platform-touchable';
 import {$} from '../assets/styles/style' ;
-import {GiftedForm, GiftedFormManager} from 'react-native-gifted-form';
+import Toast from 'react-native-root-toast';
+import {phone} from '../config/regex';
+import {login} from '../config/api';
 export default class LoginScreen extends Component {
   static navigationOptions = ({ navigation, screenProps }) => ({
     title: '用户登录',
@@ -17,12 +29,29 @@ export default class LoginScreen extends Component {
   });
   constructor (props) {
     super(props)
+    this.state = {
+      logined: false,
+      tel: '',
+      pwd: ''
+    }
     this._Login = this._Login.bind(this);
   }
   back () {
     this.props.navigation.back()
-    alert(0)
   }
+  componentWillMount() {
+    storage.load({
+      key: 'userInfo'
+    })
+    .then((res)=>{
+      if (res) {
+        this.setState({
+          logined: true
+        })
+      }
+    })
+  }
+  
   _Login () {
     const resetAction = NavigationActions.reset({
       index:0,
@@ -32,64 +61,106 @@ export default class LoginScreen extends Component {
     })
     this.props.navigation.dispatch(resetAction)
   }
-  handleValueChange () {}
-  render() {
-    return (
-      <GiftedForm
-        style={{flexDirection:'column'}}
-        formName='customerForm' // GiftedForm instances that use the same name will also share the same states
-        clearOnClose={false} // delete the values of the form when unmounted
-        defaults={{
-        }}
-        onValueChange={this.handleValueChange.bind(this)}
-        validators={{
-          name: {
-            title: '姓名',
-            validate: [{
-              validator: 'isLength',
-              arguments: [2, 6],
-              message: '{TITLE}必须是{ARGS[0]}到{ARGS[1]}位'
-            }]
-          },
-          phone: {
-            title: '手机号',
-            validate: [{
-              validator: 'isLength',
-              arguments: [11, 11],
-              message: '{TITLE}格式不正确！'
-            }]
+  handleValueChange(values) {
+    for (item in values) {
+      console.log(item, values[item])
+      this.setState({
+        [item]:values[item]
+      })
+    }
+  }
+  change(key, value){
+    this.setState({
+      [key]:value
+    })
+  }
+  _submit(){
+    const {tel, pwd} = this.state
+    if (!tel || !pwd) {
+      ToastAndroid.show('请输入手机号和密码！', ToastAndroid.SHORT)
+    } else if (!phone(tel)) {
+      ToastAndroid.show('手机号码有误', ToastAndroid.SHORT)
+    } else if (pwd.length < 6) {
+      ToastAndroid.show('密码长度必须大于6位', ToastAndroid.SHORT)
+    } else {
+      const url = login + '?tel=' + tel + '&pwd=' + pwd;
+      fetch(url,{
+        method: 'post',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(res=>{
+        res.json()
+        .then(res=>{
+          console.log(res)
+          if (res.status === 1) {
+            ToastAndroid.show('登录成功', ToastAndroid.SHORT);
+            storage.save({
+              key:'userInfo',
+              data: res.data.userInfo
+            })
+            this._Login();
+          } else {
+            ToastAndroid.show(res.msg, ToastAndroid.SHORT);
           }
-        }}
-      >
+        })
+      })
+    }
+  }
+  _renderView(){
+    if (!this.state.logined) {
+      return (
         <View
-          style={[$.w, $.columnCenter, $.h,{padding:40}]}
+          style={[$.view, $.horizontalCenter, $.columnCenter,{padding:30,flexDirection:'column'}]}
         >
-          <Image
-            style={{height:60,aspectRatio:2.66,alignSelf:'center'}}
-            source={require('../assets/images/logo.png')}
-          />
-          <GiftedForm.TextInputWidget
-            name='name'
-            image={require('../assets/images/user.png')}
-            underlineColorAndroid="transparent"
-            style={{textAlign:'left',flex:1,paddingRight:10}}
-            placeholder='请输入用户名'
-            clearButtonMode='while-editing'
-          />
-
-          <GiftedForm.TextInputWidget
-            name='phone' // mandatory
-            image={require('../assets/images/pwd.png')}
-            placeholder='请输入密码'
-            underlineColorAndroid="transparent"
-            style={{textAlign:'left',flex:1,paddingRight:10}}
-            keyboardType="numeric"
-          />
+          <Image style={[$.logo]} source={require('../assets/images/logo.png')}/>
+          <Item
+            style={[$.row]}
+          >
+            <Image style={[$.icon]} source={require('../assets/images/phone.png')}/>
+            <Input 
+              placeholder="请输入手机"
+              style={[$.input]}
+              keyboardType="numeric"
+              onChangeText={(value)=>this.change('tel', value)}
+              maxLength={11}
+            />
+          </Item>
+          <Item
+            style={[$.row]}
+          >
+            <Image style={[$.icon]} source={require('../assets/images/pwd.png')}/>
+            <Input 
+              placeholder="请输入密码"
+              style={[$.input]}
+              secureTextEntry={true}
+              onChangeText={(value)=>this.change('pwd', value)}
+            />
+          </Item>
+          <Button full danger
+            style={[$.button, $.button_default,{marginTop:20}]}
+            onPress = {()=>this._submit()}
+          >
+            <Text>登录</Text>
+          </Button>
         </View>
-      </GiftedForm>
+      )
+    } else {
+      this._Login();
+    }
+  }
+  render() {
+    const {tel, pwd} = this.state;
+    return (
+      <View
+        style={{flex:1}}
+      >
+        {
+          this._renderView()
+        }
+      </View>
     )
   }
 }
-
-const styles = StyleSheet.create({
-});
