@@ -18,7 +18,7 @@ const tabOptions = {
   lazy: true,
   initialRouteName: 'Home',
   animationEnabled: false,
-  backBehavior: !false,
+  backBehavior: 'none',
   tabBarOptions: {
     showIcon: true,
     activeTintColor: '#EB3D00',
@@ -114,10 +114,21 @@ export const Tabs = TabNavigator({
     screen: meStack
   }
 },tabOptions)
-export const Main = StackNavigator({
+export const Router = StackNavigator({
   Login: {
     screen: LoginScreen
+  },
+  Index: {
+    screen: Tabs,
+    navigationOptions: ({navigation}) => ({
+      backBehavior: 'none',
+      header: null
+    })
   }
 }, {
-  initialRouteName: 'Login'
+  initialRouteName: 'Login',
+  backBehavior: 'none',
+  navigationOptions: ({navigation}) => ({
+    header: null
+  })
 })
