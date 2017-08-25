@@ -1,12 +1,22 @@
 import React, { Component } from 'react';
 import {
   StyleSheet,
-  Text,
-  TouchableOpacity as Touch,
   Image,
   View
 } from 'react-native';
+import { 
+  Container, 
+  Content, 
+  Button, 
+  Body, 
+  Icon, 
+  Text, 
+  Item, 
+  Input 
+} from 'native-base';
 import Touchable from 'react-native-platform-touchable';
+import {NavigationActions} from 'react-navigation';
+import {$} from '../assets/styles/style' ;
 export default class MeScreen extends Component {
   static navigationOptions = ({ navigation, screenProps }) => ({
     title: '我的',
@@ -54,16 +64,28 @@ export default class MeScreen extends Component {
       userId: this.props.navigation.state.params.userId
     }
   }
+  _logout () {
+    storage.remove({
+      key: 'userInfo'
+    })
+    const resetAction = NavigationActions.reset({
+      index:0,
+      actions: [
+        NavigationActions.navigate({routeName: 'Login',params: {userId: userInfo.userId}})
+      ]
+    })
+    this.props.navigation.dispatch(resetAction)
+  }
   render() {
     const {userId} = this.state
     return (
       <View>
-        <Touchable
-          style={{padding:20}}
-          onPress={()=>this.props.navigation.navigate('Wallet',{userId:'5411.21212'})}
+        <Button full danger
+          style={[$.button, $.button_default,{marginTop:20}]}
+          onPress = {()=>this._logout()}
         >
-          <Text>我的钱包{userId}</Text>
-        </Touchable>
+          <Text>登录</Text>
+        </Button>
       </View>
     )
   }

@@ -48,6 +48,17 @@ export default class LoginScreen extends Component {
         this._Login(res);
       }
     })
+    .catch(err => {
+      switch (err.name) {
+        case 'NotFoundError':
+          // TODO; 
+          SplashScreen.hide();
+          break;
+        case 'ExpiredError':
+          // TODO 
+          break;
+      }
+    })
   }
   
   _Login (userInfo) {
