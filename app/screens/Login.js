@@ -21,6 +21,7 @@ import {$} from '../assets/styles/style' ;
 import Toast from 'react-native-root-toast';
 import {phone} from '../config/regex';
 import {login} from '../config/api';
+import SplashScreen from 'react-native-splash-screen'
 export default class LoginScreen extends Component {
   static navigationOptions = ({ navigation, screenProps }) => ({
     title: '用户登录',
@@ -57,6 +58,7 @@ export default class LoginScreen extends Component {
       ]
     })
     this.props.navigation.dispatch(resetAction)
+    SplashScreen.hide();
   }
   handleValueChange(values) {
     for (item in values) {

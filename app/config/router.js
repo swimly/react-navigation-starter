@@ -4,7 +4,7 @@ import {
   AsyncStorage
 } from 'react-native';
 import Storage from 'react-native-storage';
-import {TabNavigator, StackNavigator} from 'react-navigation';
+import {TabNavigator, StackNavigator, NavigationActions} from 'react-navigation';
 import CardStackStyleInterpolator from 'react-navigation/src/views/CardStackStyleInterpolator';
 import HomeScreen from '../screens/Home';
 import MeScreen from '../screens/Me';
@@ -22,7 +22,14 @@ global.storage = new Storage({
   sync : {
   }
 })
-
+storage.load({
+  key: 'userInfo'
+})
+.then((res)=>{
+  if (res) {
+    console.log(NavigationActions)
+  }
+})
 const tabOptions = {
   tabBarPosition:'bottom', //tabBar的位置
   swipeEnabled: false,
