@@ -19,8 +19,9 @@ import {
 } from 'native-base';
 import Touchable from 'react-native-platform-touchable';
 import {NavigationActions} from 'react-navigation';
-import {$, color, bg} from '../assets/styles/style' ;
+import {$, color, bg, fs, m} from '../assets/styles/style' ;
 import {logout, logoutSuccess} from '../config/text';
+import Qrcode from '../components/qrcode';
 export default class MeScreen extends Component {
   static navigationOptions = ({ navigation, screenProps }) => ({
     title: '我的',
@@ -35,13 +36,13 @@ export default class MeScreen extends Component {
     headerRight: 
     <View style={{flexDirection:'row'}}>
       <Touchable
-        style={{width:50,height:50,alignItems:'center',justifyContent:'center'}}
+        style={{width:35,height:50,alignItems:'center',justifyContent:'center'}}
         background={Touchable.Ripple('rgba(0,0,0,0.2)')}
       >
         <Image style={{width:24,height:24}} source={require('../assets/images/setting.png')}/>
       </Touchable>
       <Touchable
-        style={{width:50,height:50,alignItems:'center',justifyContent:'center'}}
+        style={{width:35,height:50,alignItems:'center',justifyContent:'center'}}
         background={Touchable.Ripple('rgba(0,0,0,0.2)')}
         onPress = {()=>navigation.navigate('Message',{userId: '45641531354156'})}
       >
@@ -65,7 +66,8 @@ export default class MeScreen extends Component {
     super(props)
     this.state = {
       userId: this.props.navigation.state.params.userId,
-      modalLogout: false
+      modalLogout: false,
+      modalCode: false
     }
   }
   componentWillMount() {
@@ -102,7 +104,7 @@ export default class MeScreen extends Component {
     this.props.navigation.dispatch(resetAction);
   }
   render() {
-    const {userId, modalLogout, headPic, userName, userSex} = this.state
+    const {userId, modalLogout, headPic, userName, userSex, modalCode} = this.state
     return (
       <View
         style={[$.view]}
@@ -111,10 +113,19 @@ export default class MeScreen extends Component {
           style={[bg.red,$.th]}
         >
           <View
-            style={[$.td,$.columnCenter,{flexDirection:'row'}]}
+            style={[$.td,$.columnCenter,{flexDirection:'row',paddingLeft:20,paddingBottom:20}]}
           >
             <Thumbnail large source={{uri: headPic}} />
-            <Text>{userName}</Text>
+            <Text style={{alignSelf:'center',fontSize:14,color:'#fff',marginLeft:10}}>{userName}</Text>
+            <Touchable
+              onPress = {()=>this.setState({modalCode: true})}
+              style={[{marginLeft:10,height:25,alignSelf:'center'}]}
+            >
+              <Image
+                style={{width:25,height:25,borderRadius:5}}
+               source={require('../assets/images/code.png')}/>
+            </Touchable>
+            
           </View>
         </View>
         <Button full danger
@@ -158,6 +169,29 @@ export default class MeScreen extends Component {
                   </Button>
                 </View>
               </View>
+            </View>
+          </View>
+        </Modal>
+        <Modal
+          animationType={'slide'}
+          transparent={true}
+          visible={modalCode}
+          onRequestClose={() => {}}
+        >
+          <View style={[$.mask]}>
+            <Touchable
+              style={[$.close]}
+              onPress={()=>{this.setState({modalCode: false})}}
+            >
+              <Image style={{height:50,aspectRatio:0.63}} source={require('../assets/images/close.png')}/>
+            </Touchable>
+            <View
+              style={[$.modal, $.horizontalCenter,{width:'70%'}]}
+            >
+              <Thumbnail small source={{uri: headPic}} />
+              <Text style={[fs.h5,color.gray,m.t_5]}>{userName}</Text>
+              <Qrcode text="nihao" style={{margin:10,width:140,height:140,overflow:'hidden'}}/>
+              <Text style={[fs.h6,color.gray]}>扫一扫二维码，联系我</Text>
             </View>
           </View>
         </Modal>

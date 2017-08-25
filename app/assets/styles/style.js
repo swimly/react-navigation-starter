@@ -89,7 +89,7 @@ export const $ = StyleSheet.create({
     flexDirection: 'column'
   },
   mask: {
-    backgroundColor:'rgba(0,0,0,0.2)',
+    backgroundColor:'rgba(0,0,0,0.4)',
     flex:1,
     alignItems: 'center',
     justifyContent:'center'
@@ -110,6 +110,13 @@ export const $ = StyleSheet.create({
   },
   button_small: {
     height:35
+  },
+  close:{
+    position: 'absolute',
+    top:'50%',
+    left:'50%',
+    marginTop:-185,
+    marginLeft:'25%'
   }
 })
 export const color = StyleSheet.create({
@@ -123,5 +130,18 @@ export const color = StyleSheet.create({
 export const bg = StyleSheet.create({
   red: {
     backgroundColor:'#EB3D00'
+  }
+})
+export const fs = StyleSheet.create({
+  h5: {
+    fontSize:14
+  },
+  h6: {
+    fontSize:12
+  }
+})
+export const m = StyleSheet.create({
+  t_5:{
+    marginTop:5
   }
 })
