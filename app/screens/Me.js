@@ -39,7 +39,7 @@ export default class MeScreen extends Component {
       <Touchable
         style={{width:35,height:50,alignItems:'center',justifyContent:'center'}}
         background={Touchable.Ripple('rgba(0,0,0,0.2)')}
-        onPress = {()=>{this._setting()}}
+        onPress = {()=>navigation.navigate('Setting',{userInfo: userInfo})}
       >
         <Image style={{width:24,height:24}} source={require('../assets/images/setting.png')}/>
       </Touchable>

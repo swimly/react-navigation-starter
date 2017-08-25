@@ -35,13 +35,7 @@ export default class SettingScreen extends Component {
   });
   constructor (props) {
     super(props)
-    this.state = {
-      userId: this.props.navigation.state.params.userId
-    }
-  }
-  back () {
-    this.props.navigation.back()
-    alert(0)
+    this.state = this.props.navigation.state.params.userInfo
   }
   render() {
     const {userId} = this.state
