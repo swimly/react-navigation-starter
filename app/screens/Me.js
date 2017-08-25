@@ -22,6 +22,7 @@ import {NavigationActions} from 'react-navigation';
 import {$, color, bg, fs, m} from '../assets/styles/style' ;
 import {logout, logoutSuccess} from '../config/text';
 import Qrcode from '../components/qrcode';
+global.userInfo = null;
 export default class MeScreen extends Component {
   static navigationOptions = ({ navigation, screenProps }) => ({
     title: '我的',
@@ -38,13 +39,14 @@ export default class MeScreen extends Component {
       <Touchable
         style={{width:35,height:50,alignItems:'center',justifyContent:'center'}}
         background={Touchable.Ripple('rgba(0,0,0,0.2)')}
+        onPress = {()=>{this._setting()}}
       >
         <Image style={{width:24,height:24}} source={require('../assets/images/setting.png')}/>
       </Touchable>
       <Touchable
         style={{width:35,height:50,alignItems:'center',justifyContent:'center'}}
         background={Touchable.Ripple('rgba(0,0,0,0.2)')}
-        onPress = {()=>navigation.navigate('Message',{userId: '45641531354156'})}
+        onPress = {()=>navigation.navigate('Message',{userInfo: userInfo})}
       >
         <Image style={{width:24,height:24}} source={require('../assets/images/tips.png')}/>
       </Touchable>
@@ -81,11 +83,14 @@ export default class MeScreen extends Component {
             [i]: res[i]
           })
         }
-        console.log(this.state, 999999)
+        userInfo = res
       }
     })
     .catch(err => {
     })
+  }
+  _setting () {
+    alert(0)
   }
   _logout () {
     this.setState({

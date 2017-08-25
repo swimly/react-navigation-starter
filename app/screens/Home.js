@@ -21,7 +21,7 @@ export default class HomeScreen extends Component {
     headerRight: 
     <Touchable
       style={{width:50,height:50,alignItems:'center',justifyContent:'center'}}
-      onPress = {()=>navigation.navigate('Message',{userId: '45641531354156'})}
+      onPress = {()=>navigation.navigate('Message',{userInfo: userInfo})}
       background={Touchable.Ripple('rgba(0,0,0,0.2)')}
     >
       <Image style={{width:24,height:24}} source={require('../assets/images/homeRight.png')}/>

@@ -14,6 +14,7 @@ import CompanyScreen from '../screens/Company';
 import WalletScreen from '../screens/Wallet';
 import MessageScreen from '../screens/Message';
 import LoginScreen from '../screens/Login';
+import SettingScreen from '../screens/Setting';
 global.storage = new Storage({
   size: 1000,
   storageBackend: AsyncStorage,
@@ -119,6 +120,9 @@ const meStack = StackNavigator({
   },
   Message: {
     screen: MessageScreen
+  },
+  Setting: {
+    screen: SettingScreen
   }
 },navBarOption);
 export const Tabs = TabNavigator({

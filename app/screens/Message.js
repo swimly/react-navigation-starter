@@ -23,15 +23,14 @@ export default class MessageScreen extends Component {
   });
   constructor (props) {
     super(props)
-  }
-  back () {
-    this.props.navigation.back()
-    alert(0)
+    this.state = this.props.navigation.state.params.userInfo
+    console.log(this.state,88888)
   }
   render() {
+    const {userId} = this.state;
     return (
       <View>
-        <Text>消息</Text>
+        <Text>消息{userId}</Text>
       </View>
     )
   }
