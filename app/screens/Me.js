@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import {
   StyleSheet,
   Image,
+  Modal,
+  ToastAndroid,
   View
 } from 'react-native';
 import { 
@@ -11,12 +13,14 @@ import {
   Body, 
   Icon, 
   Text, 
+  Thumbnail,
   Item, 
   Input 
 } from 'native-base';
 import Touchable from 'react-native-platform-touchable';
 import {NavigationActions} from 'react-navigation';
-import {$} from '../assets/styles/style' ;
+import {$, color, bg} from '../assets/styles/style' ;
+import {logout, logoutSuccess} from '../config/text';
 export default class MeScreen extends Component {
   static navigationOptions = ({ navigation, screenProps }) => ({
     title: '我的',
@@ -51,8 +55,7 @@ export default class MeScreen extends Component {
     },
     headerStyle: {
       backgroundColor:'#EB3D00',
-      borderBottomWidth:.5,
-      borderColor:'#DFDFDF',
+      borderBottomWidth:0,
       elevation:0,
       shadowOpacity:0,
       height: 50
@@ -61,31 +64,103 @@ export default class MeScreen extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      userId: this.props.navigation.state.params.userId
+      userId: this.props.navigation.state.params.userId,
+      modalLogout: false
     }
   }
-  _logout () {
-    storage.remove({
+  componentWillMount() {
+    storage.load({
       key: 'userInfo'
     })
+    .then((res)=>{
+      if (res) {
+        for (const i in res) {
+          this.setState({
+            [i]: res[i]
+          })
+        }
+        console.log(this.state, 999999)
+      }
+    })
+    .catch(err => {
+    })
+  }
+  _logout () {
+    this.setState({
+      modalLogout: false
+    });
+    ToastAndroid.show(logoutSuccess, ToastAndroid.SHORT);
+    storage.remove({
+      key: 'userInfo'
+    });
     const resetAction = NavigationActions.reset({
       index:0,
       actions: [
-        NavigationActions.navigate({routeName: 'Login',params: {userId: userInfo.userId}})
+        NavigationActions.navigate({routeName: 'Login'})
       ]
-    })
-    this.props.navigation.dispatch(resetAction)
+    });
+    this.props.navigation.dispatch(resetAction);
   }
   render() {
-    const {userId} = this.state
+    const {userId, modalLogout, headPic, userName, userSex} = this.state
     return (
-      <View>
-        <Button full danger
-          style={[$.button, $.button_default,{marginTop:20}]}
-          onPress = {()=>this._logout()}
+      <View
+        style={[$.view]}
+      >
+        <View
+          style={[bg.red,$.th]}
         >
-          <Text>登录</Text>
+          <View
+            style={[$.td,$.columnCenter,{flexDirection:'row'}]}
+          >
+            <Thumbnail large source={{uri: headPic}} />
+            <Text>{userName}</Text>
+          </View>
+        </View>
+        <Button full danger
+          style={[$.button_light,{marginTop:20}]}
+          onPress = {()=>this.setState({modalLogout: true})}
+        >
+          <Text style={[color.default]}>退出/登录</Text>
         </Button>
+        <Modal
+          animationType={'slide'}
+          transparent={true}
+          visible={modalLogout}
+          onRequestClose={() => {}}
+        >
+          <View style={[$.mask]}>
+            <View
+              style={[$.modal]}
+            >
+              <Text style={[$.tip,{margin:15}]}>{logout}</Text>
+              <View
+                style={[$.th]}
+              >
+                <View
+                  style={[$.td,$.f_1,{paddingRight:10}]}
+                >
+                  <Button full danger
+                    style={[$.button,$.button_border,$.button_small,{marginTop:20}]}
+                    onPress = {()=>this.setState({modalLogout: false})}
+                  >
+                    <Text style={{color:'#505050'}}>取消</Text>
+                  </Button>
+                </View>
+                <View
+                  style={[$.td,$.f_1,{paddingLeft:10}]}
+                >
+                  <Button full danger
+                    style={[$.button,$.button_default,$.button_small,{marginTop:20}]}
+                    onPress = {()=>this._logout()}
+                  >
+                    <Text>确认</Text>
+                  </Button>
+                </View>
+              </View>
+            </View>
+          </View>
+        </Modal>
       </View>
     )
   }

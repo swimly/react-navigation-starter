@@ -21,7 +21,8 @@ import {$} from '../assets/styles/style' ;
 import Toast from 'react-native-root-toast';
 import {phone} from '../config/regex';
 import {login} from '../config/api';
-import SplashScreen from 'react-native-splash-screen'
+import SplashScreen from 'react-native-splash-screen';
+import {tipTel, tipPwd, tipLogin, loginSuccess, placeholderPwd, placeholderTel} from '../config/text';
 export default class LoginScreen extends Component {
   static navigationOptions = ({ navigation, screenProps }) => ({
     title: '用户登录',
@@ -87,11 +88,11 @@ export default class LoginScreen extends Component {
   _submit(){
     const {tel, pwd} = this.state
     if (!tel || !pwd) {
-      ToastAndroid.show('请输入手机号和密码！', ToastAndroid.SHORT)
+      ToastAndroid.show(tipLogin, ToastAndroid.SHORT)
     } else if (!phone(tel)) {
-      ToastAndroid.show('手机号码有误', ToastAndroid.SHORT)
+      ToastAndroid.show(tipTel, ToastAndroid.SHORT)
     } else if (pwd.length < 6) {
-      ToastAndroid.show('密码长度必须大于6位', ToastAndroid.SHORT)
+      ToastAndroid.show(tipPwd, ToastAndroid.SHORT)
     } else {
       const url = login + '?tel=' + tel + '&pwd=' + pwd;
       fetch(url,{
@@ -106,7 +107,7 @@ export default class LoginScreen extends Component {
         .then(res=>{
           console.log(res)
           if (res.status === 1) {
-            ToastAndroid.show('登录成功', ToastAndroid.SHORT);
+            ToastAndroid.show(loginSuccess, ToastAndroid.SHORT);
             storage.save({
               key:'userInfo',
               data: res.data.userInfo
@@ -131,7 +132,7 @@ export default class LoginScreen extends Component {
         >
           <Image style={[$.icon]} source={require('../assets/images/phone.png')}/>
           <Input 
-            placeholder="请输入手机"
+            placeholder={placeholderTel}
             style={[$.input]}
             keyboardType="numeric"
             onChangeText={(value)=>this.change('tel', value)}
@@ -143,7 +144,7 @@ export default class LoginScreen extends Component {
         >
           <Image style={[$.icon]} source={require('../assets/images/pwd.png')}/>
           <Input 
-            placeholder="请输入密码"
+            placeholder={placeholderPwd}
             style={[$.input]}
             secureTextEntry={true}
             onChangeText={(value)=>this.change('pwd', value)}
